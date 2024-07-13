@@ -5,12 +5,19 @@ from application import create_app
 
 app = create_app()
 
-# You can add Streamlit specific components here if needed
+# Define the layout of your Streamlit app
 st.title("My Flask and Streamlit Application")
 
-if __name__ == '__main__':
-    from streamlit.web import cli as stcli
-    import sys
+# Running the Flask app
+if 'flask_started' not in st.session_state:
+    from threading import Thread
 
-    sys.argv = ["streamlit", "run", "streamlit_app.py"]
-    sys.exit(stcli.main())
+    def run_flask():
+        app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+
+    thread = Thread(target=run_flask)
+    thread.daemon = True
+    thread.start()
+    st.session_state.flask_started = True
+
+st.write("Flask application is running...")
