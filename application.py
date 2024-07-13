@@ -259,8 +259,12 @@ def get_sensor_data():
         "timestamp": d.timestamp.isoformat()
     } for d in data]), 200
 
-if __name__ == '__main__':
+
+def create_app():
     with application.app_context():
         db.create_all()
-        print("Database tables created.")
-    application.run(debug=True)
+    return application
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
